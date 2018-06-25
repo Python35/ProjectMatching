@@ -1,11 +1,11 @@
 import { Table } from 'react-bootstrap';
 import React from 'react';
 
+function table(data, id = true){
 
-function table(data){
     return (
         <Table className="tableClass" striped bordered condensed hover> <thead> <tr>
-            <th>#</th>
+            { id && <th>#</th>}
             {Object.keys(data[0]).map((key) => {
                 return <th>{ key }</th>
             })}
@@ -15,7 +15,7 @@ function table(data){
         <tbody>
         {data.map((dataentry, i)=>
             <tr>
-                <td>{i}</td>
+                { id && <td>{i}</td>}
                 {Object.keys(dataentry).map((key) => {
                     return <td>{ dataentry[key].toString() }</td>
                 })}

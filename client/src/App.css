@@ -9,20 +9,41 @@
 
 .App-header {
   background-color: #222;
-  height: 150px;
+  height: 100px;
   padding: 20px;
   color: white;
+  text-align:left;
 }
 
 .App-title {
   font-size: 1.5em;
 }
-
+.App-subtitle {
+  font-size: 1.2em;
+}
 .App-intro {
   font-size: large;
 }
 
+.txtConfig{
+    min-height: 150px;
+    min-width: 100px;
+    alignment:center;
+
+}
+
+.tableClass{
+    width: 90%;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+body{
+    padding-bottom: 100px;
 }
