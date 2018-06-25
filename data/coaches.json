@@ -1,0 +1,20 @@
+{ "coaches":[
+  { "name": "Ulrike",
+    "zipCode": "50528",
+    "type": "remote",
+    "languages": ["englisch", "deutsch"],
+    "interests": ["solar", "volleyball", "nlp"],
+    "sdgs": ["7", "2", "8"]},
+  { "name": "Hans",
+    "zipCode": "10815",
+    "type": "remote",
+    "languages": ["spanisch","englisch"],
+    "interests": ["nachhaltigkeit", "nlp", "laufen"],
+    "sdgs": ["2", "14"]},
+  { "name": "Ariolo",
+    "zipCode": "75687",
+    "type": "vorort",
+    "languages": ["deutsch"],
+    "interests": ["hausbau", "vollayball"],
+    "sdgs": ["1", "10"]}
+] }

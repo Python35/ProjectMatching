@@ -1,0 +1,20 @@
+{ "founders":[
+  { "name": "Energy Innovation",
+    "zipCode": "60528",
+    "type": "remote",
+    "languages": ["englisch", "deutsch"],
+    "interests": ["solar", "volleyball", "NLP"],
+    "sdgs": ["7", "1", "15"]},
+  { "name": "AlgaeFood",
+    "zipCode": "10115",
+    "type": "vorort",
+    "languages": ["spanisch","englisch"],
+    "interests": ["nachhaltigkeit", "eigenanbau", "laufen"],
+    "sdgs": ["2", "14"]},
+  { "name": "Homebau",
+    "zipCode": "35687",
+    "type": "vorort",
+    "languages": ["deutsch"],
+    "interests": ["hausbau", "wohnkonzepte"],
+    "sdgs": ["13", "11"]}
+] }
