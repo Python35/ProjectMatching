@@ -6,7 +6,7 @@
     "client": "cd client && yarn start",
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\" \"yarn dev\"",
-    "heroku-postbuild": "cd client && yarn install && yarn dev"
+    "heroku-postbuild": "cd client && yarn dev"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
