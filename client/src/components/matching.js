@@ -74,8 +74,7 @@ function matchAlgo(coaches, founders, config){
             // categories scoring
             if (obligationCheck){
                 categories.forEach(function(category){
-
-                    totalScore = totalScore + calcCommonElements(coach[category], founder[category]) * config["score"+category];
+                    totalScore = totalScore + calcCommonElements(coach[category[0]], founder[category[1]]) * category[2];
                 });
 
                 if (coach["type"] === "vorort" || founder["type"] === "vorort" ){
@@ -85,7 +84,7 @@ function matchAlgo(coaches, founders, config){
                     console.log(founder["name"] + " score: " + totalScore + " distanceReduction: " + distanceReduction)
                     match[founder.name] =  totalScore;
                 }else {
-                    console.log(founder["name"] + " score: " + totalScore)
+                    console.log(founder["name"] + " score: " + totalScore);
                     match[founder.name] =  totalScore;
                 }
             }

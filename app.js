@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 var fs = require('fs');
-sw = require('stopword');
+var sw = require('stopword');
 
 var config = JSON.parse(fs.readFileSync('./scoring.conf', 'utf8'));
 var foundersJson = JSON.parse(fs.readFileSync('./data/founders.json', 'utf8'));

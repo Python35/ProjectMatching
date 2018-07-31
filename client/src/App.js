@@ -63,6 +63,7 @@ class App extends Component {
     };
 
     matching(){
+        this.removeStopwords();
         var coaches = Array.from(this.state.coaches);
         var founders = Array.from(this.state.founders);
         var config = JSON.parse(this.state.config);
@@ -94,14 +95,14 @@ class App extends Component {
         stopwordfields.forEach(function(stopwordfield){
             founders.forEach(function(founder){
                 console.log(founder[stopwordfield]);
-                founder[stopwordfield] = sw.removeStopwords(founder[stopwordfield].toString().split(' '), sw.en.concat("want"));
-                founder[stopwordfield] = sw.removeStopwords(founder[stopwordfield].toString().split(' '), sw.de);
+                founder[stopwordfield] = (sw.removeStopwords(founder[stopwordfield].toString().split(' '), sw.en.concat("want"))).toString().split(',');
+                founder[stopwordfield] = (sw.removeStopwords(founder[stopwordfield].toString().split(' '), sw.de)).toString().split(',');
                 newfounders.push(founder);
             });
             coaches.forEach(function(coach){
                 console.log(coach[stopwordfield]);
-                coach[stopwordfield] = sw.removeStopwords(coach[stopwordfield].toString().split(' '), sw.en);
-                coach[stopwordfield] = sw.removeStopwords(coach[stopwordfield].toString().split(' '), sw.de);
+                coach[stopwordfield] = (sw.removeStopwords(coach[stopwordfield].toString().split(' '), sw.en)).toString().split(',');
+                coach[stopwordfield] = (sw.removeStopwords(coach[stopwordfield].toString().split(' '), sw.de)).toString().split(',');
                 newcoaches.push(coach);
             });
         });
