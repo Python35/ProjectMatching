@@ -22,7 +22,9 @@ class App extends Component {
         selectFounder: '',
         scoreCurrent: 0,
         dataFounders: '',
-        dataCoaches: ''
+        dataCoaches: '',
+        saveSuccess: ''
+
     };
 
     componentDidMount() {
@@ -49,6 +51,25 @@ class App extends Component {
         return body;
     };
 
+
+    callSave = async () => {
+
+        var coaches = this.state.dataCoaches;
+        var founders = this.state.dataFounders;
+        var config = this.state.config;
+        console.log('{"coaches":'+coaches+',"founders":'+founders+',"config":'+config+"}");
+
+        const response = await fetch('api/save', { method: 'POST',
+            headers: {"Accept": "application/json", "Content-Type": "application/json"},
+            body: JSON.stringify(JSON.parse('{"coaches":'+coaches+',"founders":'+founders+',"config":'+config+"}"))});
+        const body = await response.json();
+
+        if (response.status !== 200) throw Error(body.message);
+
+        return body;
+    };
+
+
     handleConfigChange(evt){
         console.log(evt.target.value);
         this.setState({ config: evt.target.value });
@@ -73,12 +94,9 @@ class App extends Component {
     };
 
     saveData(){
-        console.log(this.state.coaches);
-        var coaches = JSON.parse(this.state.dataCoaches);
-        var founders = JSON.parse(this.state.dataFounders);
-        console.log(coaches);
-        let _this = this;
-        _this.setState({ coaches : coaches, founders : founders });
+        this.callSave('/api/save')
+            .then(res => this.setState({ saveSuccess: res.express}))
+            .catch(err => console.log(err));
     }
 
     removeStopwords(){
@@ -198,6 +216,8 @@ class App extends Component {
                     bsStyle="primary"
                     onClick={(e) => this.saveData()}
                 > Save</Button>
+                <p></p>
+                {this.state.saveSuccess}
 
             </div>
     );
