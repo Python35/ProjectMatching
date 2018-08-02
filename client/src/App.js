@@ -83,8 +83,10 @@ class App extends Component {
         this.setState({ dataCoaches: evt.target.value });
     };
 
+
     matching(){
         this.removeStopwords();
+
         var coaches = Array.from(this.state.coaches);
         var founders = Array.from(this.state.founders);
         var config = JSON.parse(this.state.config);
@@ -98,6 +100,8 @@ class App extends Component {
             .then(res => this.setState({ saveSuccess: res.express}))
             .catch(err => console.log(err));
     }
+
+
 
     removeStopwords(){
         var config = JSON.parse(this.state.config);

@@ -1,5 +1,7 @@
 const express = require('express');
 
+
+
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -9,17 +11,48 @@ var sw = require('stopword');
 var config = JSON.parse(fs.readFileSync('./scoring.conf', 'utf8'));
 var foundersJson = JSON.parse(fs.readFileSync('./data/founders.json', 'utf8'));
 var coachesJson = JSON.parse(fs.readFileSync('./data/coaches.json', 'utf8'));
+var privateKey = JSON.parse(fs.readFileSync('./keys.conf', 'utf8'));
 
 var coaches = Array.from(coachesJson.coaches);
 var founders = Array.from(foundersJson.founders);
 var obligations = Array.from(config.obligations);
 var categories = Array.from(config.categories);
 
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
+
+var googleMapsClient = require('@google/maps').createClient({
+    key: privateKey.googleAPIKey
+});
+
+
+coaches.forEach(function(coach,i) {
+    googleMapsClient.geocode({
+        address: "Deutschland " + coach.zipCode
+    }, function(err, response) {
+        if (!err) {
+            coaches[i].lat =response.json.results[0].geometry.location.lat;
+            coaches[i].lng =response.json.results[0].geometry.location.lng;
+        }
+    });
+});
+
+founders.forEach(function(founder,i){
+    googleMapsClient.geocode({
+        address: "Deutschland " + founder.zipCode
+    }, function(err, response) {
+        if (!err) {
+            console.log("lat " + JSON.stringify(response.json.results[0].geometry.location.lat));
+            console.log("lon " + JSON.stringify(response.json.results[0].geometry.location.lng));
+            founders[i].lat=response.json.results[0].geometry.location.lat;
+            founders[i].lng=response.json.results[0].geometry.location.lng;
+        }
+    });
+});
+
 
 app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies
