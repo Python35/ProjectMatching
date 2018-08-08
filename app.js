@@ -1,6 +1,17 @@
 const express = require('express');
 
+/*const csvFilePath='./data/projekt.csv';
+const csv=require('csvtojson');
 
+var founders;
+
+csv().fromFile(csvFilePath)
+    .then((jsonObj)=>{
+
+        founders = jsonObj;
+
+    });
+    */
 
 const app = express();
 const port = process.env.PORT || 5000;

@@ -23,7 +23,8 @@ class App extends Component {
         scoreCurrent: 0,
         dataFounders: '',
         dataCoaches: '',
-        saveSuccess: ''
+        saveSuccess: '',
+        matchingView:[""]
 
     };
 
@@ -93,6 +94,7 @@ class App extends Component {
 
         let _this = this;
         _this.setState({ matchings: matchAlgo(coaches, founders, config)});
+        _this.setState({ matchingView: matchingView(matchings)});
     };
 
     saveData(){
@@ -191,7 +193,7 @@ class App extends Component {
                     onClick={(e) => this.removeStopwords()}
                 > Remove Common Words</Button>
 
-                { table(this.state.matchings, false)}
+                { this.state.matchings.map((match)=>)}
 
                 <p>Configuration</p>
                 <textarea className="txtConfig" onChange={(e) => this.handleConfigChange(e)} value={this.state.config} />
