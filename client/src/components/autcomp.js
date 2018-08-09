@@ -17,7 +17,7 @@ function inputChangeHandler(selectFounder,selectStr, _this) {
 
     console.log("got founder and coach " + coach.name + " " + founder.name);
 
-    if (coach != 0 && founder != 0){
+    if (coach !== 0 && founder !== 0){
 
         console.log("enter scoring function");
         _this.setState({ scoreCurrent: score(coach, founder, config)});

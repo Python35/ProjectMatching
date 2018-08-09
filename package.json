@@ -16,10 +16,12 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
+    "json2csv": "^4.2.1",
     "morgan": "~1.9.0",
     "node-zoho": "0.0.39",
     "pug": "2.0.0-beta11",
     "react-autocomplete": "^1.8.1",
+    "react-scrollable-anchor": "^0.6.1",
     "stopword": "^0.1.10",
     "zcrmsdk": "0.0.12"
   },

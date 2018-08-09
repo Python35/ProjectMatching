@@ -1,4 +1,3 @@
-import React from 'react';
 
 function getCoachFromName(_this, name){
     var coaches = Array.from(_this.state.coaches);

@@ -1,23 +1,22 @@
 const express = require('express');
 
-/*const csvFilePath='./data/projekt.csv';
+const csvFilePath='./data/projekt.csv';
 const csv=require('csvtojson');
 
 var founders;
 
-csv().fromFile(csvFilePath)
+/*csv().fromFile(csvFilePath)
     .then((jsonObj)=>{
 
         founders = jsonObj;
 
-    });
-    */
+    });*/
+
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 var fs = require('fs');
-var sw = require('stopword');
 
 var config = JSON.parse(fs.readFileSync('./scoring.conf', 'utf8'));
 var foundersJson = JSON.parse(fs.readFileSync('./data/founders.json', 'utf8'));
@@ -26,8 +25,6 @@ var privateKey = JSON.parse(fs.readFileSync('./keys.conf', 'utf8'));
 
 var coaches = Array.from(coachesJson.coaches);
 var founders = Array.from(foundersJson.founders);
-var obligations = Array.from(config.obligations);
-var categories = Array.from(config.categories);
 
 var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -56,8 +53,6 @@ founders.forEach(function(founder,i){
         address: "Deutschland " + founder.zipCode
     }, function(err, response) {
         if (!err) {
-            console.log("lat " + JSON.stringify(response.json.results[0].geometry.location.lat));
-            console.log("lon " + JSON.stringify(response.json.results[0].geometry.location.lng));
             founders[i].lat=response.json.results[0].geometry.location.lat;
             founders[i].lng=response.json.results[0].geometry.location.lng;
         }
@@ -101,6 +96,21 @@ app.post('/api/save', function(req, res) {
     res.send({express: 'Success'})
 });
 
+app.post('/api/saveExportCsv', function(req, res) {
+
+    const json2csv = require('json2csv').parse;
+    const fields = Object.keys(req.body[0]);
+    const opts = { fields };
+
+    try {
+        const csv = json2csv(req.body, opts);
+        fs.writeFileSync("./exportMatchings.csv",csv,{encoding:'utf8',flag:'w'});
+    } catch (err) {
+        console.error(err);
+    }
+
+    res.send({express: 'Success'})
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 

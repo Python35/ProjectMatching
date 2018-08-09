@@ -1,4 +1,10 @@
-import React from 'react';
+
+var groupBy = function(xs, key) {
+    return xs.reduce(function(rv, x) {
+        (rv[x[key]] = rv[x[key]] || []).push(x);
+        return rv;
+    }, {});
+};
 
 function calcCommonElements(arr1, arr2) {
     var score = 0;
@@ -23,7 +29,7 @@ function score(coach,founder, config){
     // obligatory check
     var obligationCheck = true;
     obligations.forEach(function(obligation){
-        if (calcCommonElements(coach[obligation], founder[obligation]) == 0){
+        if (calcCommonElements(coach[obligation], founder[obligation]) === 0){
             obligationCheck = false;
             return "NA - Obligations not passed" + obligation;
         }
@@ -71,26 +77,22 @@ function calcAdvOrthodromeDistance(longA, longB, latA, latB) {
 function matchAlgo(coaches, founders, config){
 
     var obligations = Array.from(config.obligations);
-    var categories = Array.from(config.categories);
-
-    console.log(config.expCoachLvl);
 
     var matches = [];
     var matches2 = [];
 
     coaches.forEach(function(coach){
         var match = {coach: coach.name};
-        var match2 = {"coach": coach[config.identCoach] };
-        console.log(coach.name);
-
 
         founders.forEach(function(founder){
+            var match2 = {"founder":founder[config.identFounder]};
+            match2["coach"] = coach[config.identCoach] ;
             var totalScore = 0;
             // obligatory check
             var obligationCheck = true;
 
             match[founder.name] = "";
-            match2["founder"] = founder[config.identFounder];
+
 
             // Essentiell
 
@@ -148,6 +150,8 @@ function matchAlgo(coaches, founders, config){
                             match[founder.name] = "Erfahrung +";
                             match2["erfahrungMatch"] = true;
                         }
+                        break;
+                    default:
                 }
 
                 //Thema
@@ -160,6 +164,7 @@ function matchAlgo(coaches, founders, config){
 
                 //Priorität
                 var scorePrio = (10 - Math.abs(coach[config.prio] - founder[config.prio])) * config.scorePrio;
+                console.log("coach " + coach[config.prio] + " founder " + founder[config.prio] + " " + scorePrio);
                 match[founder.name] = match[founder.name] + " && scorePrio: " + scorePrio;
                 match2["scorePrio"] = scorePrio;
                 totalScore = totalScore + scorePrio;
@@ -206,28 +211,41 @@ function matchAlgo(coaches, founders, config){
                             match[founder.name] =  match[founder.name] + " && Profit +";
                             match2["profitMatch"] = true;
                         }
+                        break;
+                    default:
+
                 }
                 match[founder.name] =  match[founder.name] + " && Totalscore: " + totalScore;
                 match2["totalScore"] = totalScore;
+            }else{
+                match2["erfahrungMatch"] = false;
+                match2["scoreThema"] = 0;
+                match2["scorePrio"] = 0;
+                match2["distanzBonus"] = false;
+                match2["scoreInteressen"] = 0;
+                match2["profitMatch"] = false;
+                match2["totalScore"] = 0;
             }
+            matches2.push(match2);
 
         });
-        matches2.push(match2);
+
+
         matches.push(match);
     });
 
-    return matches;
+    matches2.sort((a,b) => a.totalScore - b.totalScore);
+    matches2.sort(function(obj1, obj2) {
+        // Ascending: first age less than the previous
+        return obj2.totalScore - obj1.totalScore;
+    });
+    matches2 = groupBy(matches2, "founder");
+
+    return Object.values(matches2);
 
 }
 
-function matchingview(matchings,config){
-
-    var tops =[];
 
 
-    return tops;
-}
-
-
-export {score, matchAlgo,matchingview };
+export {score, matchAlgo };
 
