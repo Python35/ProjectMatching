@@ -1,17 +1,28 @@
 const express = require('express');
 
-const csvFilePath='./data/projekt.csv';
 const csv=require('csvtojson');
 
 var founders;
-
-/*csv().fromFile(csvFilePath)
+const csvProjektFilePath='./data/projekt.csv';
+/* Auskommentieren
+csv().fromFile(csvProjektFilePath)
     .then((jsonObj)=>{
 
         founders = jsonObj;
 
-    });*/
+    });
+*/
 
+var coaches;
+const csvCoachesFilePath='./data/coaches.csv';
+/*Auskommentieren
+csv().fromFile(csvCoachesFilePath)
+    .then((jsonObj)=>{
+
+        coaches = jsonObj;
+
+    });
+*/
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -19,12 +30,14 @@ const port = process.env.PORT || 5000;
 var fs = require('fs');
 
 var config = JSON.parse(fs.readFileSync('./scoring.conf', 'utf8'));
-var foundersJson = JSON.parse(fs.readFileSync('./data/founders.json', 'utf8'));
-var coachesJson = JSON.parse(fs.readFileSync('./data/coaches.json', 'utf8'));
 var privateKey = JSON.parse(fs.readFileSync('./keys.conf', 'utf8'));
 
-var coaches = Array.from(coachesJson.coaches);
-var founders = Array.from(foundersJson.founders);
+// Einkommentieren
+var foundersJson = JSON.parse(fs.readFileSync('./data/founders.json', 'utf8'));
+var coachesJson = JSON.parse(fs.readFileSync('./data/coaches.json', 'utf8'));
+coaches = Array.from(coachesJson.coaches);
+founders = Array.from(foundersJson.founders);
+
 
 var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -33,12 +46,14 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));
 
 var googleMapsClient = require('@google/maps').createClient({
+    // Google API KEY anpassen
     key: privateKey.googleAPIKey
 });
 
 
 coaches.forEach(function(coach,i) {
     googleMapsClient.geocode({
+        // Address Felder einfügen
         address: "Deutschland " + coach.zipCode
     }, function(err, response) {
         if (!err) {
@@ -50,6 +65,7 @@ coaches.forEach(function(coach,i) {
 
 founders.forEach(function(founder,i){
     googleMapsClient.geocode({
+        // Address Felder einfügen
         address: "Deutschland " + founder.zipCode
     }, function(err, response) {
         if (!err) {
@@ -58,7 +74,6 @@ founders.forEach(function(founder,i){
         }
     });
 });
-
 
 app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies

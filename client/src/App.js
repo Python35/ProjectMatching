@@ -4,12 +4,14 @@ import { Navbar, Nav, NavItem, Button } from 'react-bootstrap';
 
 import './App.css';
 import {table} from "./components/datatable";
-import {matchAlgo, score} from "./components/matching";
-import autcomp from "./components/autcomp";
-import {getFounderFromName, getCoachFromName} from "./components/helper";
+import {matchAlgo} from "./components/matching";
 import ScrollableAnchor from 'react-scrollable-anchor';
 
 const sw = require('stopword');
+
+function has(object, key) {
+    return object ? hasOwnProperty.call(object, key) : false;
+}
 
 
 class App extends Component {
@@ -25,8 +27,6 @@ class App extends Component {
         dataFounders: '',
         dataCoaches: '',
         saveSuccess: '',
-        matchingView:[""]
-
     };
 
     componentDidMount() {
@@ -126,13 +126,17 @@ class App extends Component {
 
         stopwordfields.forEach(function(stopwordfield){
             founders.forEach(function(founder){
-                founder[stopwordfield] = (sw.removeStopwords(founder[stopwordfield].toString().split(' '), sw.en.concat("want"))).toString().split(',');
-                founder[stopwordfield] = (sw.removeStopwords(founder[stopwordfield].toString().split(' '), sw.de)).toString().split(',');
+                if (has(founder,stopwordfield)){
+                    founder[stopwordfield] = (sw.removeStopwords(founder[stopwordfield].toString().split(' '), sw.en.concat("want"))).toString().split(',');
+                    founder[stopwordfield] = (sw.removeStopwords(founder[stopwordfield].toString().split(' '), sw.de)).toString().split(',');
+                }
                 newfounders.push(founder);
             });
             coaches.forEach(function(coach){
-                coach[stopwordfield] = (sw.removeStopwords(coach[stopwordfield].toString().split(' '), sw.en)).toString().split(',');
-                coach[stopwordfield] = (sw.removeStopwords(coach[stopwordfield].toString().split(' '), sw.de)).toString().split(',');
+                if (has(coach,stopwordfield)) {
+                    coach[stopwordfield] = (sw.removeStopwords(coach[stopwordfield].toString().split(' '), sw.en)).toString().split(',');
+                    coach[stopwordfield] = (sw.removeStopwords(coach[stopwordfield].toString().split(' '), sw.de)).toString().split(',');
+                }
                 newcoaches.push(coach);
             });
         });
@@ -140,25 +144,8 @@ class App extends Component {
 
     }
 
-    score(){
-        console.log("enter scoring");
-        let _this = this;
-        var coach = getCoachFromName(_this, this.state.selectCoach);
-        var founder = getFounderFromName(_this, this.state.selectFounder);
-        var config = JSON.parse(this.state.config);
-
-        console.log("got founder and coach " + coach.name + " " + founder.name);
-
-        if (coach !== 0 && founder !== 0){
-
-            console.log("enter scoring function");
-            _this.setState({ scoreCurrent: score(coach, founder, config)});
-        }
-
-    };
 
     render() {
-
         return (
             <div className="App">
                 <Navbar inverse collapseOnSelect>
@@ -217,19 +204,6 @@ class App extends Component {
                 <p>Configuration</p>
                 </ScrollableAnchor>
                 <textarea className="txtConfig" onChange={(e) => this.handleConfigChange(e)} value={this.state.config} />
-
-                <p>1 on 1 Scoring</p>
-                <p>Coach</p>
-                { this.state.coaches.length>1 &&
-                    autcomp(this.state.coaches, this , "selectCoach")
-                }
-
-                <p>Founder</p>
-                { this.state.founders.length>1 &&
-                    autcomp(this.state.founders, this , "selectFounder")
-                }
-                <p>Score</p>
-                {this.state.scoreCurrent}
 
                 <ScrollableAnchor id={'Data'}>
                 <p>Data Founders</p>
