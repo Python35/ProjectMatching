@@ -171,10 +171,10 @@ class App extends Component {
                 </Navbar>
 
                 <p>Coaches</p>
-                { table(this.state.coaches,false)}
+                { table(this.state.coaches, false,3)}
 
                 <p>Founders</p>
-                { table(this.state.founders, false)}
+                { table(this.state.founders, false, 3)}
 
                 <ScrollableAnchor id={'Matching'}>
                 <Button
@@ -204,21 +204,11 @@ class App extends Component {
                 <p>Configuration</p>
                 </ScrollableAnchor>
                 <textarea className="txtConfig" onChange={(e) => this.handleConfigChange(e)} value={this.state.config} />
-
-                <ScrollableAnchor id={'Data'}>
-                <p>Data Founders</p>
-                </ScrollableAnchor>
-                <textarea className="txtConfig" onChange={(e) => this.handleDataFoundersChange(e)} value={this.state.dataFounders} />
-
-
-                <p>Data Coaches</p>
-                <textarea className="txtConfig" onChange={(e) => this.handleDataCoachesChange(e)} value={this.state.dataCoaches} />
                 <p></p>
                 <Button
                     bsStyle="primary"
                     onClick={(e) => this.saveData()}
-                > Save</Button>
-                <p></p>
+                > Save Config</Button>
                 {this.state.saveSuccess}
 
             </div>

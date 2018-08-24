@@ -7,6 +7,7 @@ var groupBy = function(xs, key) {
 };
 
 function calcCommonElements(arr1, arr2) {
+
     var score = 0;
     for (var i = 0, len1 = arr1.length; i < len1; i++) {
         for (var j = 0, len2 = arr2.length; j < len2; j++) {
@@ -39,12 +40,9 @@ function calcAdvOrthodromeDistance(longA, longB, latA, latB) {
 
 function matchAlgo(coaches, founders, config){
 
-    var obligations = Array.from(config.obligations);
     var matches2 = [];
 
     coaches.forEach(function(coach){
-        var match = {coach: coach.name};
-
         founders.forEach(function(founder){
             var match2 = {"founder":founder[config.identFounder]};
             match2["coach"] = coach[config.identCoach] ;
@@ -53,86 +51,127 @@ function matchAlgo(coaches, founders, config){
             var obligationCheck = true;
 
             // Essentiell
-            // Sprache und sonstige Obligations
-            obligations.forEach(function(obligation){
-                if (calcCommonElements(coach[obligation], founder[obligation]) === 0){
-                    obligationCheck = false;
-                    match2["check"+obligation] = false;
-                }else{
-                    match2["check"+obligation] = true;
-                }
-            });
+            // Sprache
+            match2["checkSprache"] = true;
 
-            // Alter überprüfung: Alter vom Coach > Alter vom Gründer
-            if (coach[config.alter]<founder[config.alter] ){
+            if (founder["Erstprache"]==="Deutsch" && coach["Deutsch"].indexOf("Deutsch") === -1){
+                console.log("founder[\"Erstprache\"]: "+ founder["Erstprache"]);
+                console.log(" coach[\"Deutsch\"]: " +  coach["Deutsch"]);
                 obligationCheck = false;
-                match2["checkAlter"] = false;
-            }else{
-                match2["checkAlter"] = true;
+                match2["checkSprache"] = false;
+            }else if (coach["Englisch"].indexOf("Deutsch") !== -1){
+                obligationCheck = false;
+                match2["checkSprache"] = false;
+            }
+
+            match2["checkAlter"] = true;
+            if (!isNaN(coach[config.alter]) && !isNaN(founder[config.alter])){
+                // Alter überprüfung: Alter vom Coach > Alter vom Gründer
+                if (coach[config.alter]>founder[config.alter] ){
+                    obligationCheck = false;
+                    match2["checkAlter"] = false;
+                }
             }
 
             if (obligationCheck) {
-
                 // Hoch
                 match2["erfahrungMatch"] = false;
 
                 //Erfahrung Mapping
+
                 switch (coach.experience) {
                     case config.expCoachLvl[0]:
                         if (founder.experience === config.expFounderLvl[0]) {
-                            totalScore = totalScore + config.scoreExperience[0];
-                            match2["erfahrungMatch"] = true;
+                            totalScore = totalScore + config.scoreExperiencePlus[0];
+                            match2["erfahrungMatch"] = "Plus";
+                        }else{
+                            totalScore = totalScore - config.scoreExperienceminus[0];
+                            match2["erfahrungMatch"] = "Minus";
                         }
                         break;
                     case config.expCoachLvl[1]:
                         if (founder.experience === config.expFounderLvl[0]) {
                             totalScore = totalScore + config.scoreExperience[1];
-                            match2["erfahrungMatch"] = true;
+                            match2["erfahrungMatch"] = "Plus";
+                        }else if (founder.experience === config.expFounderLvl[1]){
+                            match2["erfahrungMatch"] = "Neutral";
+                        }else{
+                            totalScore = totalScore - config.scoreExperienceminus[1];
+                            match2["erfahrungMatch"] = "Minus";
                         }
                         break;
                     case config.expCoachLvl[2]:
                         if (founder.experience === config.expFounderLvl[1]) {
                             totalScore = totalScore + config.scoreExperience[2];
-                            match2["erfahrungMatch"] = true;
+                            match2["erfahrungMatch"] = "Plus";
+                        }else{
+                            match2["erfahrungMatch"] = "Neutral";
                         }
                         break;
                     case config.expCoachLvl[3]:
                         if (founder.experience === config.expFounderLvl[2]) {
                             totalScore = totalScore + config.scoreExperience[3];
-                            match2["erfahrungMatch"] = true;
+                            match2["erfahrungMatch"] = "Plus";
+                        }else if (founder.experience === config.expFounderLvl[0]){
+                            totalScore = totalScore - config.scoreExperienceminus[3];
+                            match2["erfahrungMatch"] = "Minus";
+                        }else{
+                            match2["erfahrungMatch"] = "Neutral";
                         }
                         break;
                     default:
                 }
 
                 //Thema
-                var scoreThema = calcCommonElements(coach[config.thema], founder[config.thema]) * config.scoreThema;
-                match2["scoreThema"] = scoreThema;
-                totalScore = totalScore + scoreThema;
+                if (coach.hasOwnProperty(config.thema) && founder.hasOwnProperty(config.thema)) {
+                    if (coach[config.thema] !== "" && founder[config.thema] !== "") {
+                        console.log("thema coach: " + coach[config.thema]);
+                        console.log("thema founder: " + founder[config.thema]);
+                        var scoreThema = calcCommonElements(coach[config.thema], founder[config.thema]) * config.scoreThema;
+                        match2["scoreThema"] = scoreThema;
+                        totalScore = totalScore + scoreThema;
+                    }
+                }else{
+                    match2["scoreThema"] = 0;
+                }
 
                 // Mittel
 
                 //Priorität
-                var scorePrio = (10 - Math.abs(coach[config.prio] - founder[config.prio])) * config.scorePrio;
-                match2["scorePrio"] = scorePrio;
-                totalScore = totalScore + scorePrio;
+                if (coach.hasOwnProperty(config.prio) && founder.hasOwnProperty(config.prio)){
+                    if (coach[config.prio]!=="" && founder[config.prio]!=="") {
+                        var scorePrio = (10 - Math.abs(coach[config.prio] - founder[config.prio])) * config.scorePrio;
+                        match2["scorePrio"] = scorePrio;
+                        totalScore = totalScore + scorePrio;
+                    }
+                } else{
+                    match2["scorePrio"] = 0;
+                }
 
 
                 // Distanz
                 match2["distanzBonus"] = false;
-                if (founder.lat != null && founder.lng != null  && coach.lat != null && coach.lng != null ){
-                    if(calcAdvOrthodromeDistance(founder.lng, coach.lng, founder.lat, coach.lat) < 100){
-                        totalScore = totalScore + config.scoreDistanzBonus;
-                        match2["distanzBonus"] = true;
+                if (founder.hasOwnProperty("lat") && founder.hasOwnProperty("lng") && coach.hasOwnProperty("lat") && coach.hasOwnProperty("lng")) {
+                    if (founder.lat !== "" && founder.lng !== "" && coach.lat !== "" && coach.lng !== "") {
+                        if (calcAdvOrthodromeDistance(founder.lng, coach.lng, founder.lat, coach.lat) < 100) {
+                            totalScore = totalScore + config.scoreDistanzBonus;
+                            match2["distanzBonus"] = true;
+                        }
                     }
                 }
 
                 //Niedrig
 
                 // Interessen
-                var scoreInteressen = calcCommonElements(coach[config.interessen], founder[config.interessen]) * config.scoreInteressen;
-                match2["scoreInteressen"] = scoreInteressen;
-                totalScore = totalScore + scoreInteressen;
+                if (founder.hasOwnProperty(config.interessen) && coach.hasOwnProperty(config.interessen)) {
+                    if (coach[config.interessen]!=="" && founder[config.interessen]!=="") {
+                        var scoreInteressen = calcCommonElements(coach[config.interessen], founder[config.interessen]) * config.scoreInteressen;
+                        match2["scoreInteressen"] = 11;
+                        totalScore = totalScore + scoreInteressen;
+                    }
+                } else  {
+                    match2["scoreInteressen"] = 0;
+                }
 
                 match2["profitMatch"] = false;
                 //Profit

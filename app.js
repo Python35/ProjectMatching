@@ -1,84 +1,112 @@
 const express = require('express');
 
+var bodyParser = require('body-parser');
+
+const json2csv = require('json2csv').parse;
 const csv=require('csvtojson');
 
-var founders;
-const csvProjektFilePath='./data/projekt.csv';
-/* Auskommentieren
-csv().fromFile(csvProjektFilePath)
-    .then((jsonObj)=>{
-
-        founders = jsonObj;
-
-    });
-*/
-
-var coaches;
+var coaches=[];
+var founders=[];
+const csvProjektFilePath='./data/projekte.csv';
 const csvCoachesFilePath='./data/coaches.csv';
-/*Auskommentieren
-csv().fromFile(csvCoachesFilePath)
-    .then((jsonObj)=>{
-
-        coaches = jsonObj;
-
-    });
-*/
-
-const app = express();
-const port = process.env.PORT || 5000;
+const scoringConfPath = './scoring.conf';
+const keysPath ='./keys.conf';
 
 var fs = require('fs');
-
-var config = JSON.parse(fs.readFileSync('./scoring.conf', 'utf8'));
-var privateKey = JSON.parse(fs.readFileSync('./keys.conf', 'utf8'));
-
-// Einkommentieren
-var foundersJson = JSON.parse(fs.readFileSync('./data/founders.json', 'utf8'));
-var coachesJson = JSON.parse(fs.readFileSync('./data/coaches.json', 'utf8'));
-coaches = Array.from(coachesJson.coaches);
-founders = Array.from(foundersJson.founders);
-
-
-var bodyParser = require('body-parser');
-app.use( bodyParser.json() );       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-    extended: true
-}));
+var config = JSON.parse(fs.readFileSync(scoringConfPath, 'utf8'));
+var privateKey = JSON.parse(fs.readFileSync(keysPath, 'utf8'));
 
 var googleMapsClient = require('@google/maps').createClient({
     // Google API KEY anpassen
     key: privateKey.googleAPIKey
 });
 
-
-coaches.forEach(function(coach,i) {
-    googleMapsClient.geocode({
-        // Address Felder einfügen
-        address: "Deutschland " + coach.zipCode
-    }, function(err, response) {
-        if (!err) {
-            coaches[i].lat =response.json.results[0].geometry.location.lat;
-            coaches[i].lng =response.json.results[0].geometry.location.lng;
-        }
-    });
-});
-
-founders.forEach(function(founder,i){
-    googleMapsClient.geocode({
-        // Address Felder einfügen
-        address: "Deutschland " + founder.zipCode
-    }, function(err, response) {
-        if (!err) {
-            founders[i].lat=response.json.results[0].geometry.location.lat;
-            founders[i].lng=response.json.results[0].geometry.location.lng;
-        }
-    });
-});
-
+const app = express();
+const port = process.env.PORT || 5000;
 app.use(express.json());       // to support JSON-encoded bodies
-app.use(express.urlencoded()); // to support URL-encoded bodies
+app.use(express.urlencoded({extended: true})); // to support URL-encoded bodies
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    extended: true
+}));
+
+
+function getFoundersFromFileWithGeo() {
+    csv().fromFile(csvProjektFilePath)
+        .then((jsonObj)=>{
+            founders = jsonObj;
+            console.log(JSON.stringify(founders));
+            founders.forEach(function(founder,i){
+                //if (false){
+                if (founder[config.plz]){
+                    googleMapsClient.geocode({
+                        // Address Felder einfügen
+                        address: founder[config.land] + " " + founder[config.plz]
+                    }, function(err, response) {
+                        if (!err) {
+                            founders[i].lat=response.json.results[0].geometry.location.lat;
+                            founders[i].lng=response.json.results[0].geometry.location.lng;
+                        }
+                    });
+                }
+            });
+        });
+}
+
+
+function getCoachesFromFileWithGeo(){
+    csv().fromFile(csvCoachesFilePath)
+        .then((jsonObj)=>{
+            coaches = jsonObj;
+
+            coaches.forEach(function(coach,i) {
+                //if (false){
+                if (coach[config.plz] !== ""){
+                    googleMapsClient.geocode({
+                        // Address Felder einfügen
+                        address: coach[config.land] + " " + coach[config.plz]
+                    }, function(err, response) {
+                        if (!err) {
+                            coaches[i].lat =response.json.results[0].geometry.location.lat;
+                            coaches[i].lng =response.json.results[0].geometry.location.lng;
+                        }
+                    });
+                }
+            });
+        });
+}
+
+getFoundersFromFileWithGeo();
+getCoachesFromFileWithGeo();
+
+
+/*
+// Einkommentieren JSON Files
+var foundersJson = JSON.parse(fs.readFileSync('./data/founders.json', 'utf8'));
+var coachesJson = JSON.parse(fs.readFileSync('./data/coaches.json', 'utf8'));
+coaches = Array.from(coachesJson.coaches);
+founders = Array.from(foundersJson.founders);
+
+
+const json2csv = require('json2csv').parse;
+const fields = Object.keys(coaches[0]);
+const fields2 = Object.keys(founders[0]);
+const opts = { fields };
+const opts2 = { fields2 };
+
+try {
+    const csv = json2csv(coaches, opts);
+    const csv2 = json2csv(founders, opts2);
+    fs.writeFileSync("./coaches.csv",csv,{encoding:'utf8',flag:'w'});
+    fs.writeFileSync("./projekte.csv",csv2,{encoding:'utf8',flag:'w'});
+} catch (err) {
+    console.error(err);
+}
+*/
+
 
 app.get('/api/hello', (req, res) => {
+
     res.send({ express: 'Hello From Express' });
 });
 
@@ -98,7 +126,17 @@ app.get('/api/config', (req, res) => {
     res.send({ express: config });
 });
 
+app.get('/api/refreshCoaches', (req, res) => {
+    getCoachesFromFileWithGeo();
+    res.send({ express: coaches });
+});
 
+app.get('/api/refreshFounders', (req, res) => {
+    getFoundersFromFileWithGeo()
+    res.send({ express: founders });
+});
+
+/* NOT USED
 app.post('/api/save', function(req, res) {
     console.log(req.body.coaches);
     console.log(req.body.founders);
@@ -110,10 +148,11 @@ app.post('/api/save', function(req, res) {
 
     res.send({express: 'Success'})
 });
+*/
 
 app.post('/api/saveExportCsv', function(req, res) {
 
-    const json2csv = require('json2csv').parse;
+
     const fields = Object.keys(req.body[0]);
     const opts = { fields };
 
@@ -122,6 +161,7 @@ app.post('/api/saveExportCsv', function(req, res) {
         fs.writeFileSync("./exportMatchings.csv",csv,{encoding:'utf8',flag:'w'});
     } catch (err) {
         console.error(err);
+        res.send({express: err})
     }
 
     res.send({express: 'Success'})
