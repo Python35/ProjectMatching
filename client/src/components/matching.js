@@ -146,7 +146,7 @@ function matchAlgo(coaches, founders, config){
                         console.log("Bedarf +");
                         match2["scoreBedarf"] = scoreBedarf;
                         totalScore = totalScore + scoreBedarf;
-                        
+
                         /*
                         console.log("thema coach: " + coach[config.thema]);
                         console.log("thema founder: " + founder[config.thema]);

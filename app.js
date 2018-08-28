@@ -18,8 +18,8 @@ var fs = require('fs');
 
 var coaches=[];
 var founders=[];
-const csvProjektFilePath='./data/projekte1.csv';
-const csvCoachesFilePath='./data/coaches2.csv';
+const csvProjektFilePath='./data/projekte.csv';
+const csvCoachesFilePath='./data/coaches.csv';
 const scoringConfPath = './scoring.conf';
 const keysPath ='./keys.conf';
 

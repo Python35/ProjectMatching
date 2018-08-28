@@ -2,7 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e00f64a1-0161-48b7-8d3a-1db239410ad9" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/matching.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/matching.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/coaches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/coaches.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/coaches1.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/coaches2.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/projekte.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/projekte.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/projekte1.csv" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -37,11 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="matching.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="matching.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/src/components/matching.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="151">
-              <caret line="148" column="24" lean-forward="true" selection-start-line="148" selection-start-column="24" selection-end-line="148" selection-end-column="24" />
+            <state relative-caret-position="2460">
+              <caret line="164" column="44" lean-forward="true" selection-start-line="164" selection-start-column="44" selection-end-line="164" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -55,20 +61,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="139">
-              <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="projekte1.csv" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/projekte1.csv">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="31" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
+            <state relative-caret-position="272">
+              <caret line="20" column="47" lean-forward="true" selection-start-line="20" selection-start-column="47" selection-end-line="20" selection-end-column="47" />
             </state>
           </provider>
         </entry>
@@ -86,7 +83,7 @@
         <entry file="file://$PROJECT_DIR$/data/projekte.csv">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="90">
-              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
             </state>
           </provider>
         </entry>
@@ -147,9 +144,9 @@
         <option value="$PROJECT_DIR$/data/coaches.csv" />
         <option value="$PROJECT_DIR$/data/projekte.csv" />
         <option value="$PROJECT_DIR$/client/src/App.js" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/scoring.conf" />
         <option value="$PROJECT_DIR$/client/src/components/matching.js" />
+        <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
   </component>
@@ -253,12 +250,12 @@
       <workItem from="1530876104499" duration="1672000" />
       <workItem from="1532591302412" duration="23073000" />
       <workItem from="1533747294147" duration="32070000" />
-      <workItem from="1535091948034" duration="13905000" />
+      <workItem from="1535091948034" duration="15136000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="123860000" />
+    <option name="totallyTimeSpent" value="125091000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="23" width="1387" height="877" extended-state="0" />
@@ -569,7 +566,7 @@
     <entry file="file://$PROJECT_DIR$/data/projekte.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
         </state>
       </provider>
     </entry>
@@ -611,13 +608,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scoring.conf">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="416">
@@ -627,8 +617,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/matching.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
-          <caret line="148" column="24" lean-forward="true" selection-start-line="148" selection-start-column="24" selection-end-line="148" selection-end-column="24" />
+        <state relative-caret-position="2460">
+          <caret line="164" column="44" lean-forward="true" selection-start-line="164" selection-start-column="44" selection-end-line="164" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="20" column="47" lean-forward="true" selection-start-line="20" selection-start-column="47" selection-end-line="20" selection-end-column="47" />
         </state>
       </provider>
     </entry>
