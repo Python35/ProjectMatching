@@ -142,11 +142,11 @@ function matchAlgo(coaches, founders, config){
                 //Thema
                 if (coach.hasOwnProperty(config.BedarfCoach) && founder.hasOwnProperty(config.BedarfFounder)) {
                     if (coach[config.BedarfCoach] !== "" && founder[config.BedarfFounder] !== "") {
-                        if (coach[config.BedarfCoach] === founder[config.BedarfFounder]){
-                            console.log("Bedarf +");
-                            match2["scoreBedarf"] = config.scoreBedarf;
-                            totalScore = totalScore + config.scoreBedarf;
-                        }
+                        var scoreBedarf = calcCommonElements(coach[config.BedarfCoach].split(","), founder[config.BedarfFounder].split(",")) * config.scoreBedarf;
+                        console.log("Bedarf +");
+                        match2["scoreBedarf"] = scoreBedarf;
+                        totalScore = totalScore + scoreBedarf;
+                        
                         /*
                         console.log("thema coach: " + coach[config.thema]);
                         console.log("thema founder: " + founder[config.thema]);

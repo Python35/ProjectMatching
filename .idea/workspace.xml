@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e00f64a1-0161-48b7-8d3a-1db239410ad9" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.~lock.exportMatchings.csv#" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/components/matching.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/matching.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/.~lock.coaches.csv#" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/.~lock.projekte.csv#" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/coaches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/coaches.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/projekte.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/projekte.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exportMatchings.csv" beforeDir="false" afterPath="$PROJECT_DIR$/exportMatchings.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scoring.conf" beforeDir="false" afterPath="$PROJECT_DIR$/scoring.conf" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -50,8 +40,8 @@
       <file leaf-file-name="matching.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/client/src/components/matching.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="224" column="42" selection-start-line="224" selection-start-column="42" selection-end-line="224" selection-end-column="42" />
+            <state relative-caret-position="151">
+              <caret line="148" column="24" lean-forward="true" selection-start-line="148" selection-start-column="24" selection-end-line="148" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -263,12 +253,12 @@
       <workItem from="1530876104499" duration="1672000" />
       <workItem from="1532591302412" duration="23073000" />
       <workItem from="1533747294147" duration="32070000" />
-      <workItem from="1535091948034" duration="13292000" />
+      <workItem from="1535091948034" duration="13905000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="123247000" />
+    <option name="totallyTimeSpent" value="123860000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="23" width="1387" height="877" extended-state="0" />
@@ -637,8 +627,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/components/matching.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="224" column="42" selection-start-line="224" selection-start-column="42" selection-end-line="224" selection-end-column="42" />
+        <state relative-caret-position="151">
+          <caret line="148" column="24" lean-forward="true" selection-start-line="148" selection-start-column="24" selection-end-line="148" selection-end-column="24" />
         </state>
       </provider>
     </entry>
