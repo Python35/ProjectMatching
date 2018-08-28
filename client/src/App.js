@@ -65,6 +65,15 @@ class App extends Component {
         return body;
     };
 
+    refresh(){
+        this.callApi('/api/refreshCoaches')
+            .then(res => this.setState({ coaches: res.express, dataCoaches: JSON.stringify(res.express) }))
+            .catch(err => console.log(err));
+        this.callApi('/api/refreshFounders')
+            .then(res => this.setState({ founders: res.express, dataFounders: JSON.stringify(res.express) }))
+            .catch(err => console.log(err));
+    }
+
     handleConfigChange(evt){
         console.log(evt.target.value);
         this.setState({ config: evt.target.value });
@@ -171,17 +180,28 @@ class App extends Component {
                 </Navbar>
 
                 <p>Coaches</p>
-                { table(this.state.coaches, false,3)}
+                { this.state.config === "" &&
+                    table(this.state.coaches, false, 3)}
+                { this.state.config !== "" &&
+                    table(this.state.coaches, false, JSON.parse(this.state.config)["limitDataView"])}
 
                 <p>Founders</p>
-                { table(this.state.founders, false, 3)}
+                { this.state.config === "" &&
+                    table(this.state.founders, false, 3)}
+                { this.state.config !== "" &&
+                    table(this.state.founders, false, JSON.parse(this.state.config)["limitDataView"])}
 
                 <ScrollableAnchor id={'Matching'}>
                 <Button
                     bsStyle="primary"
                     onClick={(e) => this.matching()}
                 > Match</Button>
+
                 </ScrollableAnchor>
+                <Button
+                    bsStyle="primary"
+                    onClick={(e) => this.refresh()}
+                > Reload Data</Button>
 
                 <Button
                     bsStyle="primary"

@@ -5,14 +5,25 @@ var bodyParser = require('body-parser');
 const json2csv = require('json2csv').parse;
 const csv=require('csvtojson');
 
+var fs = require('fs');
+
+
+
+
+
+
+// encrypt data
+
+
+
 var coaches=[];
 var founders=[];
-const csvProjektFilePath='./data/projekte.csv';
-const csvCoachesFilePath='./data/coaches.csv';
+const csvProjektFilePath='./data/projekte1.csv';
+const csvCoachesFilePath='./data/coaches2.csv';
 const scoringConfPath = './scoring.conf';
 const keysPath ='./keys.conf';
 
-var fs = require('fs');
+
 var config = JSON.parse(fs.readFileSync(scoringConfPath, 'utf8'));
 var privateKey = JSON.parse(fs.readFileSync(keysPath, 'utf8'));
 
@@ -35,22 +46,30 @@ function getFoundersFromFileWithGeo() {
     csv().fromFile(csvProjektFilePath)
         .then((jsonObj)=>{
             founders = jsonObj;
-            console.log(JSON.stringify(founders));
+            //console.log(JSON.stringify(founders));
             founders.forEach(function(founder,i){
                 //if (false){
-                if (founder[config.plz]){
-                    googleMapsClient.geocode({
-                        // Address Felder einfügen
-                        address: founder[config.land] + " " + founder[config.plz]
-                    }, function(err, response) {
-                        if (!err) {
-                            founders[i].lat=response.json.results[0].geometry.location.lat;
-                            founders[i].lng=response.json.results[0].geometry.location.lng;
-                        }
-                    });
+                if (founder.hasOwnProperty(config.plz)){
+                    if (founder[config.plz]){
+                        //console.log(founder[config.plz]);
+                        googleMapsClient.geocode({
+                            // Address Felder einfügen
+                            address: founder[config.land] + " " + founder[config.plz]
+                        }, function(err, response) {
+
+                            if (!err) {
+                                founders[i].lat=response.json.results[0].geometry.location.lat;
+                                founders[i].lng=response.json.results[0].geometry.location.lng;
+                            }
+
+                        });
+                    }
                 }
+
             });
+
         });
+
 }
 
 
@@ -61,17 +80,21 @@ function getCoachesFromFileWithGeo(){
 
             coaches.forEach(function(coach,i) {
                 //if (false){
-                if (coach[config.plz] !== ""){
-                    googleMapsClient.geocode({
-                        // Address Felder einfügen
-                        address: coach[config.land] + " " + coach[config.plz]
-                    }, function(err, response) {
-                        if (!err) {
-                            coaches[i].lat =response.json.results[0].geometry.location.lat;
-                            coaches[i].lng =response.json.results[0].geometry.location.lng;
-                        }
-                    });
+                if (coach.hasOwnProperty(config.plz)){
+                    if (coach[config.plz] !== ""){
+                        googleMapsClient.geocode({
+                            // Address Felder einfügen
+                            address: coach[config.land] + " " + coach[config.plz]
+                        }, function(err, response) {
+                            if (!err) {
+
+                                coaches[i].lat =response.json.results[0].geometry.location.lat;
+                                coaches[i].lng =response.json.results[0].geometry.location.lng;
+                            }
+                        });
+                    }
                 }
+
             });
         });
 }
@@ -126,14 +149,67 @@ app.get('/api/config', (req, res) => {
     res.send({ express: config });
 });
 
+
+
 app.get('/api/refreshCoaches', (req, res) => {
-    getCoachesFromFileWithGeo();
-    res.send({ express: coaches });
+    csv().fromFile(csvCoachesFilePath)
+        .then((jsonObj)=>{
+            coaches = jsonObj;
+            var itemsProcessed = 0;
+            coaches.forEach(function(coach,i) {
+                if (coach.hasOwnProperty(config.plz) && coach.hasOwnProperty(config.land)){
+                    if (coach[config.plz] !== ""){
+                        googleMapsClient.geocode({
+                            address: coach[config.land] + " " + coach[config.plz]
+                        }, function(err, response) {
+                            if (!err) {
+                                coaches[i].lat=response.json.results[0].geometry.location.lat;
+                                coaches[i].lng=response.json.results[0].geometry.location.lng;
+                            }
+                            itemsProcessed++;
+                            if(itemsProcessed === coaches.filter(function (e) { return e[config.plz]!==""}).length) {
+                                res.send({ express: coaches });
+                            }});
+                    }
+                }else{
+                    res.send({ express: coaches });
+                }
+            });
+        });
 });
 
 app.get('/api/refreshFounders', (req, res) => {
-    getFoundersFromFileWithGeo()
-    res.send({ express: founders });
+    csv().fromFile(csvProjektFilePath)
+        .then((jsonObj)=>{
+            founders = jsonObj;
+            var itemsProcessed =0;
+            founders.forEach(function(founder,i){
+                //if (false){
+                if (founder.hasOwnProperty(config.plz) && founder.hasOwnProperty(config.land)){
+                    if (founder[config.plz] !== ""){
+
+                        googleMapsClient.geocode({
+                            // Address Felder einfügen
+                            address: founder[config.land] + " " + founder[config.plz]
+                        }, function(err, response) {
+
+                            if (!err) {
+                                founders[i].lat=response.json.results[0].geometry.location.lat;
+                                founders[i].lng=response.json.results[0].geometry.location.lng;
+                            }
+                            itemsProcessed++;
+                            if(itemsProcessed === founders.filter(function (e) { return e[config.plz]!==""}).length) {
+                                res.send({ express: founders });
+                            }});
+                    }
+                }else{
+                    res.send({ express: founders });
+                }
+
+            });
+
+        });
+
 });
 
 /* NOT USED

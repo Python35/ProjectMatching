@@ -54,9 +54,7 @@ function matchAlgo(coaches, founders, config){
             // Sprache
             match2["checkSprache"] = true;
 
-            if (founder["Erstprache"]==="Deutsch" && coach["Deutsch"].indexOf("Deutsch") === -1){
-                console.log("founder[\"Erstprache\"]: "+ founder["Erstprache"]);
-                console.log(" coach[\"Deutsch\"]: " +  coach["Deutsch"]);
+            if (founder["Erstprache"]==="Deutsch" && coach["Deutsch"].indexOf("Deutsch") === -1 && coach["Erstprache"].indexOf("Deutsch")=== -1){
                 obligationCheck = false;
                 match2["checkSprache"] = false;
             }else if (coach["Englisch"].indexOf("Deutsch") !== -1){
@@ -79,9 +77,9 @@ function matchAlgo(coaches, founders, config){
 
                 //Erfahrung Mapping
 
-                switch (coach.experience) {
+                switch (coach["Vorerfahrungen Coaching"]) {
                     case config.expCoachLvl[0]:
-                        if (founder.experience === config.expFounderLvl[0]) {
+                        if (founder["Erfahrung"] === config.expFounderLvl[0]) {
                             totalScore = totalScore + config.scoreExperiencePlus[0];
                             match2["erfahrungMatch"] = "Plus";
                         }else{
@@ -90,30 +88,30 @@ function matchAlgo(coaches, founders, config){
                         }
                         break;
                     case config.expCoachLvl[1]:
-                        if (founder.experience === config.expFounderLvl[0]) {
-                            totalScore = totalScore + config.scoreExperience[1];
+                        if (founder["Erfahrung"] === config.expFounderLvl[0]) {
+                            totalScore = totalScore + config.scoreExperiencePlus[1];
                             match2["erfahrungMatch"] = "Plus";
                         }else if (founder.experience === config.expFounderLvl[1]){
                             match2["erfahrungMatch"] = "Neutral";
                         }else{
-                            totalScore = totalScore - config.scoreExperienceminus[1];
+                            totalScore = totalScore - config.scoreExperienceMinus[1];
                             match2["erfahrungMatch"] = "Minus";
                         }
                         break;
                     case config.expCoachLvl[2]:
-                        if (founder.experience === config.expFounderLvl[1]) {
-                            totalScore = totalScore + config.scoreExperience[2];
+                        if (founder["Erfahrung"] === config.expFounderLvl[1]) {
+                            totalScore = totalScore + config.scoreExperiencePlus[2];
                             match2["erfahrungMatch"] = "Plus";
                         }else{
                             match2["erfahrungMatch"] = "Neutral";
                         }
                         break;
                     case config.expCoachLvl[3]:
-                        if (founder.experience === config.expFounderLvl[2]) {
-                            totalScore = totalScore + config.scoreExperience[3];
+                        if (founder["Erfahrung"] === config.expFounderLvl[2]) {
+                            totalScore = totalScore + config.scoreExperiencePlus[3];
                             match2["erfahrungMatch"] = "Plus";
-                        }else if (founder.experience === config.expFounderLvl[0]){
-                            totalScore = totalScore - config.scoreExperienceminus[3];
+                        }else if (founder["Erfahrung"] === config.expFounderLvl[0]){
+                            totalScore = totalScore - config.scoreExperienceMinus[3];
                             match2["erfahrungMatch"] = "Minus";
                         }else{
                             match2["erfahrungMatch"] = "Neutral";
@@ -122,17 +120,40 @@ function matchAlgo(coaches, founders, config){
                     default:
                 }
 
+                match2["scoreThema"] = 0;
                 //Thema
-                if (coach.hasOwnProperty(config.thema) && founder.hasOwnProperty(config.thema)) {
-                    if (coach[config.thema] !== "" && founder[config.thema] !== "") {
+                if (coach.hasOwnProperty(config.ThemaCoach) && founder.hasOwnProperty(config.ThemaFounder)) {
+                    if (coach[config.ThemaCoach] !== "" && founder[config.ThemaFounder] !== "") {
+                        if (coach[config.ThemaCoach] === founder[config.ThemaFounder]){
+                            console.log("Thema +");
+                            match2["scoreThema"] = config.scoreThema;
+                            totalScore = totalScore + config.scoreThema;
+                        }
+                        /*
                         console.log("thema coach: " + coach[config.thema]);
                         console.log("thema founder: " + founder[config.thema]);
                         var scoreThema = calcCommonElements(coach[config.thema], founder[config.thema]) * config.scoreThema;
                         match2["scoreThema"] = scoreThema;
-                        totalScore = totalScore + scoreThema;
+                        totalScore = totalScore + scoreThema;*/
                     }
-                }else{
-                    match2["scoreThema"] = 0;
+                }
+
+                match2["scoreBedarf"] = 0;
+                //Thema
+                if (coach.hasOwnProperty(config.BedarfCoach) && founder.hasOwnProperty(config.BedarfFounder)) {
+                    if (coach[config.BedarfCoach] !== "" && founder[config.BedarfFounder] !== "") {
+                        if (coach[config.BedarfCoach] === founder[config.BedarfFounder]){
+                            console.log("Bedarf +");
+                            match2["scoreBedarf"] = config.scoreBedarf;
+                            totalScore = totalScore + config.scoreBedarf;
+                        }
+                        /*
+                        console.log("thema coach: " + coach[config.thema]);
+                        console.log("thema founder: " + founder[config.thema]);
+                        var scoreThema = calcCommonElements(coach[config.thema], founder[config.thema]) * config.scoreThema;
+                        match2["scoreThema"] = scoreThema;
+                        totalScore = totalScore + scoreThema;*/
+                    }
                 }
 
                 // Mittel
@@ -201,6 +222,7 @@ function matchAlgo(coaches, founders, config){
             }else{
                 match2["erfahrungMatch"] = false;
                 match2["scoreThema"] = 0;
+                match2["scoreBedarf"] = 0;
                 match2["scorePrio"] = 0;
                 match2["distanzBonus"] = false;
                 match2["scoreInteressen"] = 0;
