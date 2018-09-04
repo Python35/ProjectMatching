@@ -138,21 +138,43 @@ function matchAlgo(coaches, founders, config){
                     }
                 }
 
-                match2["scoreBedarf"] = 0;
-                //Thema
-                if (coach.hasOwnProperty(config.BedarfCoach) && founder.hasOwnProperty(config.BedarfFounder)) {
-                    if (coach[config.BedarfCoach] !== "" && founder[config.BedarfFounder] !== "") {
-                        var scoreBedarf = calcCommonElements(coach[config.BedarfCoach].split(","), founder[config.BedarfFounder].split(",")) * config.scoreBedarf;
-                        console.log("Bedarf +");
-                        match2["scoreBedarf"] = scoreBedarf;
-                        totalScore = totalScore + scoreBedarf;
+                /* �
 
-                        /*
+                match2["scoreSdg"] = 0;
+                //Thema
+                if (coach.hasOwnProperty(config.SdgCoach) && founder.hasOwnProperty(config.SdgFounder)) {
+                    if (coach[config.SdgCoach] !== "" && founder[config.SdgFounder] !== "") {
+                        coach[config.SdgCoach] = coach[config.SdgCoach].replace(/[\�\ä\\\&]+/g, '');
+
+                            console.log("Thema +");
+                            match2["scoreThema"] = config.scoreThema;
+                            totalScore = totalScore + config.scoreThema;
+                        }
+
                         console.log("thema coach: " + coach[config.thema]);
                         console.log("thema founder: " + founder[config.thema]);
                         var scoreThema = calcCommonElements(coach[config.thema], founder[config.thema]) * config.scoreThema;
                         match2["scoreThema"] = scoreThema;
-                        totalScore = totalScore + scoreThema;*/
+                        totalScore = totalScore + scoreThema;
+                    }
+                }*/
+
+
+                match2["scoreBedarf"] = 0;
+                //Thema
+                if (coach.hasOwnProperty(config.BedarfCoach) && founder.hasOwnProperty(config.BedarfFounder)) {
+                    if (coach[config.BedarfCoach] !== "" && founder[config.BedarfFounder] !== "") {
+                        var scoreBedarf = 0;
+                        if (coach.hasOwnProperty(config.BedarfCoach2) && coach[config.BedarfCoach2] !== ""){
+                            scoreBedarf = calcCommonElements((coach[config.BedarfCoach]+coach[config.BedarfCoach2]).split(","), founder[config.BedarfFounder].split(",")) * config.scoreBedarf;
+
+                        }else{
+                            scoreBedarf = calcCommonElements(coach[config.BedarfCoach].split(","), founder[config.BedarfFounder].split(",")) * config.scoreBedarf;
+                        }
+                        console.log("Bedarf +");
+                        match2["scoreBedarf"] = scoreBedarf;
+                        totalScore = totalScore + scoreBedarf;
+
                     }
                 }
 
