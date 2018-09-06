@@ -257,10 +257,6 @@ class App extends Component {
                     onClick={(e) => this.refresh()}
                 > Reload Data</Button>
 
-                <Button
-                    bsStyle="primary"
-                    onClick={(e) => this.removeStopwords()}
-                > Remove Common Words</Button>
 
                 <Button
                     bsStyle="primary"
