@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { Navbar, Nav, NavItem, Button } from 'react-bootstrap';
-
+import {googleAPIKey} from './key.js';
 import './App.css';
 import {table} from "./components/datatable";
 import {matchAlgo} from "./components/matching";
@@ -10,7 +10,7 @@ import ScrollableAnchor from 'react-scrollable-anchor';
 // import marker from 'react-markers';
 import {Gmaps, Marker, InfoWindow, Circle} from 'react-gmaps';
 
-const params = {v: '3.exp', key: 'AIzaSyBO4LQ-cdV8QcXlDhoRF3pJ7KbJ7ug0eFI'};
+const params = {v: '3.exp', key: googleAPIKey};
 
 
 const coords = {
