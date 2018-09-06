@@ -4,6 +4,7 @@ import ReactAutocomplete from "react-autocomplete";
 import {getFounderFromName, getCoachFromName} from "./helper";
 import {score} from "./matching";
 
+
 function inputChangeHandler(selectFounder,selectStr, _this) {
     var key = selectStr;
     var val = selectFounder;

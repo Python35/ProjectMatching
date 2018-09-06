@@ -6,6 +6,34 @@ import './App.css';
 import {table} from "./components/datatable";
 import {matchAlgo} from "./components/matching";
 import ScrollableAnchor from 'react-scrollable-anchor';
+// import GoogleMapReact from 'google-map-react';
+// import marker from 'react-markers';
+import {Gmaps, Marker, InfoWindow, Circle} from 'react-gmaps';
+
+const params = {v: '3.exp', key: 'AIzaSyBO4LQ-cdV8QcXlDhoRF3pJ7KbJ7ug0eFI'};
+
+
+const coords = {
+    lat: 51.013955,
+    lng: 9.978368
+};
+
+const AnyReactComponent = ({ text }) => (
+    <div style={{
+        color: 'white',
+        background: 'grey',
+        padding: '5px 5px',
+        display: 'inline-flex',
+        textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '100%',
+        transform: 'translate(-50%, -50%)'
+    }}>
+        {text}
+    </div>
+);
+
 
 const sw = require('stopword');
 
@@ -15,6 +43,7 @@ function has(object, key) {
 
 
 class App extends Component {
+
     state = {
         response: '',
         coaches: [""] ,
@@ -28,6 +57,31 @@ class App extends Component {
         dataCoaches: '',
         saveSuccess: '',
     };
+    static defaultProps = {
+        center: {
+            lat: 51.013955,
+            lng: 9.978368
+        },
+        zoom: 7
+    };
+
+    onMapCreated(map) {
+        map.setOptions({
+            disableDefaultUI: true
+        });
+    }
+
+    onDragEnd(e) {
+        console.log('onDragEnd', e);
+    }
+
+    onCloseClick() {
+        console.log('onCloseClick');
+    }
+
+    onClick(e) {
+        console.log('onClick', e);
+    }
 
     componentDidMount() {
         this.callApi('/api/hello')
@@ -225,11 +279,43 @@ class App extends Component {
                 </ScrollableAnchor>
                 <textarea className="txtConfig" onChange={(e) => this.handleConfigChange(e)} value={this.state.config} />
                 <p></p>
-                <Button
-                    bsStyle="primary"
-                    onClick={(e) => this.saveData()}
-                > Save Config</Button>
-                {this.state.saveSuccess}
+                <p></p>
+
+
+                <Gmaps
+                    width={'1000px'}
+                    height={'1000px'}
+
+                    lat={coords.lat}
+                    lng={coords.lng}
+                    zoom={7}
+                    loadingMessage={'Be happy'}
+                    params={params}
+                    onMapCreated={this.onMapCreated}>
+                    {this.state.founders.length>1 &&
+                    this.state.founders.map((founder, i)=>
+                        <Marker
+                            lat={founder.lat}
+                            lng={founder.lng}
+                            draggable={false}
+                        />
+                    )
+                    }
+
+                    {this.state.coaches.length>1 &&
+                    this.state.coaches.map((coach, i)=>
+                        <Marker
+                            lat={coach.lat}
+                            lng={coach.lng}
+
+                            draggable={false}
+                            color = {'black'}
+                        />
+                    )
+                    }
+
+
+                </Gmaps>
 
             </div>
     );
